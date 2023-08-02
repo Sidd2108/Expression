@@ -29,7 +29,7 @@ const IndexPage = () => {
                     </div>
                 </div>
             )}
-            <div className='m-12 flex flex-col gap-2'>
+            <div className='m-16 flex flex-col gap-7 lg:m-24 xl:m-32'>
                 {!!user && (
 
                     <Link to={'/createPost'} className='flex gap-2 p-3 bg-teal-50 rounded-full w-80'>
@@ -41,13 +41,22 @@ const IndexPage = () => {
                 )}
 
                 {posts.length > 0 && posts.map(post => (
-                    <Link to={'/expression/' + post._id}>
-                        <div>{post.title}</div>
-                        <div className='w-auto h-44'>{post.content.substr(0, 400)} ...</div>
-                        {post.photos?.[0] && (
-                            <img src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" />
-                        )}
+                    <Link className='flex items-start gap-1' to={'/expression/' + post._id}>
 
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-36 mt-2 -rotate-90 text-teal-900 ">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                        <div className='flex flex-col sm:flex-row gap-2'>
+
+                            <div className='flex flex-col gap-2'>
+                                <h2 className=' bg-teal-50 p-2 rounded-xl font-serif text-xl font-semibold'>{post.title}</h2>
+                                <div className='w-auto h-44 font-serif text-lg font-medium'>{post.content.substr(0, 300)} ...</div>
+
+                            </div>
+                            {post.photos?.[0] && (
+                                <img className="w-48 h-48 object-contain" src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" />
+                            )}
+                        </div>
                     </Link>
                 ))}
 
