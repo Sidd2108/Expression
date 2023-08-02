@@ -8,6 +8,9 @@ const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
+const imageDownloader = require('image-downloader');
+const multer = require('multer');
 
 require('dotenv').config();
 app.use(express.json());
@@ -17,6 +20,7 @@ app.use(cors({
     "credentials": true,
 }));
 
+app.use('/uploads', express.static(__dirname + '/uploads'));
 mongoose.connect(process.env.MONGO_URL);
 const bcryptSalt = bcrypt.genSaltSync(15);
 const jwtsecret = process.env.JWT_SECRET;
@@ -79,9 +83,35 @@ app.get('/profile', (req, res) => {
 
 app.post('/logout', (req, res) => {
     res.cookie('token', '').json(true)
-})
+});
+
+
+app.post('/upload-by-link', async (req, res) => {
+    const { link } = req.body;
+    const newName = 'photo' + Date.now() + '.jpg';
+    await imageDownloader.image({
+        url: link,
+        dest: __dirname + '/uploads/' + newName
+    })
+    res.json(newName);
+});
+
+const photosMiddleware = multer({ dest: 'uploads' });
+app.post('/upload', photosMiddleware.array('photos', 10), (req, res) => {
+    const uploadedFiles = [];
+    for (let i = 0; i < req.files.length; i++) {
+        const { path, originalname } = req.files[i];
+        const parts = originalname.split('.');
+        const ext = parts[parts.length - 1];
+        const newPath = path + '.' + ext;
+        fs.renameSync(path, newPath);
+        uploadedFiles.push(newPath.replace('uploads\\', ''));
+
+    }
+    res.json(uploadedFiles);
+});
 
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");
-})
+});

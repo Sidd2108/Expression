@@ -19,8 +19,17 @@ export default function Header() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-10 h-10" viewBox="0 0 16 16">
                     <path d="M9.025 8c0 2.485-2.02 4.5-4.513 4.5A4.506 4.506 0 0 1 0 8c0-2.486 2.02-4.5 4.512-4.5A4.506 4.506 0 0 1 9.025 8zm4.95 0c0 2.34-1.01 4.236-2.256 4.236-1.246 0-2.256-1.897-2.256-4.236 0-2.34 1.01-4.236 2.256-4.236 1.246 0 2.256 1.897 2.256 4.236zM16 8c0 2.096-.355 3.795-.794 3.795-.438 0-.793-1.7-.793-3.795 0-2.096.355-3.795.794-3.795.438 0 .793 1.699.793 3.795z" />
                 </svg>
-                <h1 className="text-black font-serif bold text-3xl pb-1">Expression</h1>
+                <h1 className="invisible overflow-hidden lg:visible text-black font-serif bold text-3xl pb-1 ">Expression</h1>
             </Link>
+
+            <div className="flex items-center rounded-full border bg-teal-50 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <input className="rounded-2xl bg-teal-50 focus:outline-none" name="search" id="" placeholder="Search expression" autoComplete="off" />
+
+            </div>
+
             <div className="flex gap-2">
 
                 <Link to={'/about'}>

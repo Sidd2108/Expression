@@ -3,7 +3,7 @@ import React from 'react'
 const AboutPage = () => {
     return (
         <>
-            <div className=' py-36 mx-10 font-serif text-5xl'>
+            <div className=' py-36 mx-10 font-serif text-5xl text-center'>
                 Every idea needs a <span className='font-bold'>Expression</span>
             </div>
             <div className='flex flex-col sm:flex-row border border-black'>
