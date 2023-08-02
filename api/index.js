@@ -4,6 +4,7 @@ const app = express();
 
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Post = require('./models/Post');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -110,6 +111,26 @@ app.post('/upload', photosMiddleware.array('photos', 10), (req, res) => {
     }
     res.json(uploadedFiles);
 });
+
+
+app.post('/expressions', (req, res) => {
+    const { token } = req.cookies;
+    const { title, content, addedPhotos } = req.body;
+    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+        if (err) throw err;
+
+        const postDoc = await Post.create({
+            owner: userData.id,
+            title, content, photos: addedPhotos,
+            postedAt: new Date().getDate()
+        })
+        res.json(postDoc);
+    });
+});
+
+app.get('/expressions', async (req, res) => {
+    res.json(await Post.find());
+})
 
 
 app.listen(3000, () => {

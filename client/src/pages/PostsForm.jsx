@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom';
 import PhotosUploader from '../PhotosUploader';
+import axios from 'axios';
 
 const PostsForm = () => {
 
@@ -8,9 +9,45 @@ const PostsForm = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [addedPhotos, setAddedPhotos] = useState([]);
+    const [redirect, setRedirect] = useState('');
 
-    function savePost() {
+    useEffect(() => {
+        if (!id) {
+            return;
+        }
+        axios.get('/expressions' + id).then(response => {
+            const { data } = response;
+            setTitle(data.title);
+            setContent(data.content);
+            setAddedPhotos(data.addedPhotos);
+        })
+    }, [id])
 
+    async function savePost(ev) {
+        ev.preventDefault();
+        const postData = {
+            title, content, addedPhotos
+        }
+        if (id) {
+            //update post
+            await axios.put('/expressions', {
+                id, ...postData
+            })
+            setRedirect('/account');
+        }
+        else {
+            //new post
+            await axios.post('/expressions', postData);
+            setRedirect('/');
+
+        }
+        setTitle('');
+        setContent('');
+        setAddedPhotos([]);
+
+    }
+    if (redirect) {
+        return <Navigate to={redirect} />
     }
 
     return (
@@ -21,7 +58,7 @@ const PostsForm = () => {
                 <textarea className='focus:outline-none text-md font-serif' value={content} onChange={ev => setContent(ev.target.value)}
                     type="text" name="" id="" rows={10} placeholder='Add your Expression...' />
                 <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-                <button type='submit' className='bg-primary w-full mt-2 font-serif text-lg rounded-2xl p-2'>Submit</button>
+                <button className='bg-primary w-full mt-2 font-serif text-lg rounded-2xl p-2'>Submit</button>
 
             </form>
         </div>

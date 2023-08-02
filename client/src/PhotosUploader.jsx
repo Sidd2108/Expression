@@ -41,9 +41,9 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
                     placeholder="Upload photos via Link .....jpg" />
                 <button onClick={addPhotoByLink} className=" bg-primary px-4 rounded-full">Add&nbsp;photos</button>
             </div>
-            <div className='mt-2 grid items-center gap-2 grid-cols-4 md:grid-cols-5 lg:grid-cols-7'>
+            <div className='mt-2 w-auto grid items-center gap-2 grid-cols-4 md:grid-cols-5 lg:grid-cols-7'>
                 {addedPhotos.length > 0 && addedPhotos.map(link => (
-                    <div className="h-24 w-max flex relative" key={link}>
+                    <div className="h-24 w-auto flex relative" key={link}>
                         <img className="rounded-2xl w-auto object-cover" src={"http://localhost:3000/uploads/" + link} alt="" />
                         <button onClick={ev => removePhoto(ev, link)} className=" cursor-pointer absolute bottom-1 right-1 py-1 px-2 rounded-2xl text-white bg-black bg-opacity-50">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
