@@ -129,7 +129,7 @@ app.post('/expressions', (req, res) => {
 });
 
 app.get('/expressions', async (req, res) => {
-    res.json(await Post.find());
+    res.json(await Post.find().populate('owner'));
 })
 
 
