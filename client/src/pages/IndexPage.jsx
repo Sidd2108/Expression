@@ -6,6 +6,7 @@ import PostsPage from './PostsPage';
 
 
 const IndexPage = () => {
+
     const { user } = useContext(UserContext);
     const [posts, setPosts] = useState([]);
 
@@ -42,7 +43,24 @@ const IndexPage = () => {
 
                 {posts.length > 0 && posts.map(post => (
                     <div key={post._id} className='p-1 rounded-3xl bg-teal-50'>
-                        <PostsPage post={post} />
+                        <h2 className='font-serif px-2'> Posted by : <span className='font-semibold'>{post.owner.name}</span></h2>
+                        <div className=' flex items-start gap-1' >
+
+                            <div className='flex items-center flex-col md:flex-row gap-2'>
+
+                                <div className='flex flex-col gap-2 p-2 '>
+                                    <Link to={'/expression/' + post._id} className='rounded-xl font-serif text-xl font-semibold hover:underline'>{post.title}</Link>
+                                    <div className='w-auto font-serif text-lg font-medium overflow-hidden cursor-default'>{post.content.substr(0, 280)} ...</div>
+
+                                </div>
+
+                                {post.photos?.[0] && (
+                                    <img className="hidden md:block overflow-hidden rounded-2xl" src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" />
+                                )}
+
+
+                            </div>
+                        </div>
                     </div>
                 ))}
 

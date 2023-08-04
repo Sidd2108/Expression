@@ -25,6 +25,7 @@ const App = () => {
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/account' element={<ProfilePage />} />
+          <Route path='/account/expressions/:id' element={<PostsForm />} />
           <Route path='/createPost' element={<PostsForm />} />
           <Route path='/expression/:id' element={<PostPage />} />
 

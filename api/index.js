@@ -112,6 +112,11 @@ app.post('/upload', photosMiddleware.array('photos', 10), (req, res) => {
 });
 
 
+
+app.get('/expressions', async (req, res) => {
+    res.json(await Post.find().populate({ path: 'owner', select: 'name' }));
+})
+
 app.post('/expressions', (req, res) => {
     const { token } = req.cookies;
     const { title, content, addedPhotos } = req.body;
@@ -127,15 +132,40 @@ app.post('/expressions', (req, res) => {
     });
 });
 
-app.get('/expressions', async (req, res) => {
-    res.json(await Post.find().populate({ path: 'owner', select: 'name' }));
+
+app.put('/expressions', async (req, res) => {
+    const { token } = req.cookies;
+    const { id, title, content, addedPhotos } = req.body;
+
+    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const postDoc = await Post.findById(id);
+
+        if (userData.id === postDoc.owner.toString()) {
+            postDoc.set({
+                title, content, photos: addedPhotos
+            });
+            await postDoc.save();
+            res.json('ok');
+        }
+    })
 })
+
 
 
 app.get('/expressions/:id', async (req, res) => {
     const { id } = req.params;
-    res.json(await Post.findById(id).populate({ path: 'owner', select: 'name' }));
+    res.json(await Post.findById(id));
 });
+
+app.get('/user-posts', (req, res) => {
+    const { token } = req.cookies;
+    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const { id } = userData;
+        res.json(await Post.find({ owner: id }));
+    })
+})
 
 
 app.listen(3000, () => {

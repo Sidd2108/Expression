@@ -15,11 +15,11 @@ const PostsForm = () => {
         if (!id) {
             return;
         }
-        axios.get('/expressions' + id).then(response => {
+        axios.get('/expressions/' + id).then(response => {
             const { data } = response;
             setTitle(data.title);
             setContent(data.content);
-            setAddedPhotos(data.addedPhotos);
+            setAddedPhotos(data.photos);
         })
     }, [id])
 
