@@ -12,7 +12,6 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
-
 require('dotenv').config();
 app.use(express.json());
 app.use(cookieParser());
@@ -129,8 +128,14 @@ app.post('/expressions', (req, res) => {
 });
 
 app.get('/expressions', async (req, res) => {
-    res.json(await Post.find().populate('owner'));
+    res.json(await Post.find().populate({ path: 'owner', select: 'name' }));
 })
+
+
+app.get('/expressions/:id', async (req, res) => {
+    const { id } = req.params;
+    res.json(await Post.findById(id).populate({ path: 'owner', select: 'name' }));
+});
 
 
 app.listen(3000, () => {
