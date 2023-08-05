@@ -190,6 +190,17 @@ app.post('/add-to-favourites/:id', async (req, res) => {
 })
 
 
+app.get('/favourite-posts', async (req, res) => {
+    const { token } = req.cookies;
+    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const userDoc = await User.findById(userData.id);
+        const favPosts = userDoc.favPosts;
+        const posts = await Post.find({ '_id': { $in: favPosts } }).populate({ path: 'owner', select: 'name' });
+        res.json(posts);
+    })
+})
+
 app.listen(3000, () => {
     console.log("Server running on port 3000");
 });
