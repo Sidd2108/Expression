@@ -155,7 +155,7 @@ app.put('/expressions', async (req, res) => {
 
 app.get('/expressions/:id', async (req, res) => {
     const { id } = req.params;
-    res.json(await Post.findById(id));
+    res.json(await Post.findById(id).populate({ path: 'owner', select: 'name' }));
 });
 
 app.get('/user-posts', (req, res) => {
@@ -164,6 +164,28 @@ app.get('/user-posts', (req, res) => {
         if (err) throw err;
         const { id } = userData;
         res.json(await Post.find({ owner: id }));
+    })
+})
+
+
+app.post('/add-to-favourites/:id', async (req, res) => {
+    const { token } = req.cookies;
+    const { id } = req.params;
+    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const userDoc = await User.findById(userData.id);
+        const favPosts = userDoc.favPosts;
+        if (!favPosts.includes(id)) {
+            favPosts.push(id);
+            userDoc.set({
+                favPosts
+            })
+            await userDoc.save();
+            res.json("Added to favourites");
+        } else {
+            res.json("Already in Favourites");
+        }
+
     })
 })
 
