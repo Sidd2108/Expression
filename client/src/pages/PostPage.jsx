@@ -62,7 +62,7 @@ const PostPage = () => {
             {listofWords.length > 0 && listofWords.map((list, index) => (
                 <div className='flex flex-col gap-3 items-center' key={list}>
                     <div className='font-serif font-medium text-xl'>{listofWords[index]}</div>
-                    <img className='sm:max-w-md lg:max-w-xl m-8 rounded-3xl ' src={'http://localhost:3000/uploads/' + post.photos?.[index]} alt="" />
+                    <img loading="lazy" className='sm:max-w-md lg:max-w-xl m-8 rounded-3xl ' src={'http://localhost:3000/uploads/' + post.photos?.[index]} alt="" />
                 </div>
             ))}
 

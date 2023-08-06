@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../UserContext';
 import axios from 'axios';
-import PostsPage from './PostsPage';
 
 
 const IndexPage = () => {
@@ -55,7 +54,7 @@ const IndexPage = () => {
                                 </div>
 
                                 {post.photos?.[0] && (
-                                    <img className="hidden md:block overflow-hidden rounded-2xl" src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" />
+                                    <img className="hidden md:block overflow-hidden rounded-2xl max-h-96 " src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" loading='lazy' />
                                 )}
 
 

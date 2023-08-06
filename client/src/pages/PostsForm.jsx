@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom';
-import PhotosUploader from '../PhotosUploader';
+const PhotosUploader = lazy(() => import('../PhotosUploader'));
 import axios from 'axios';
 
 const PostsForm = () => {
@@ -57,7 +57,9 @@ const PostsForm = () => {
                     type="text" name="title" id="" placeholder='Title' />
                 <textarea className='focus:outline-none text-md font-serif' value={content} onChange={ev => setContent(ev.target.value)}
                     type="text" name="" id="" rows={10} placeholder='Add your Expression...' />
-                <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
+                </Suspense>
                 <button className='bg-primary w-full mt-2 font-serif text-lg rounded-2xl p-2'>Submit</button>
 
             </form>

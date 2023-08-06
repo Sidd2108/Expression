@@ -16,7 +16,7 @@ const PostsPage = ({ post, id, postRedirect }) => {
                 </div>
 
                 {post.photos?.[0] && (
-                    <img className="hidden md:block overflow-hidden rounded-2xl" src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" />
+                    <img loading="lazy" className="hidden md:block overflow-hidden rounded-2xl" src={'http://localhost:3000/uploads/' + post.photos?.[0]} alt="" />
                 )}
 
 

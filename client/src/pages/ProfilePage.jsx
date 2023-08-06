@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { Suspense, lazy, useContext, useState } from "react";
 import { UserContext } from "../UserContext";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
-import PostsPage from "./PostsPage";
-import FavPosts from "./FavPosts";
+const PostsPage = lazy(() => import("./PostsPage"));
 
 
 const ProfilePage = () => {
@@ -63,7 +62,9 @@ const ProfilePage = () => {
 
                 {posts.length > 0 && posts.map(post => (
                     <div key={post._id} className='p-1 rounded-3xl bg-teal-50'>
-                        <PostsPage post={post} id={post._id} postRedirect={postRedirect} />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <PostsPage post={post} id={post._id} postRedirect={postRedirect} />
+                        </Suspense>
                     </div>
                 ))}
             </div>
