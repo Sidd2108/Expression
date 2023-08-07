@@ -36,8 +36,11 @@ const PostPage = () => {
 
 
     async function handleClick() {
-        await axios.post(`/add-to-favourites/${id}`);
-        setClicked(true);
+        const { data } = await axios.post(`/add-to-favourites/${id}`);
+        if (data === "Login First") {
+            alert(data);
+        }
+        else setClicked(true);
     }
 
     return (

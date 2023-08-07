@@ -16,7 +16,6 @@ const RegisterPage = () => {
                 email,
                 password
             });
-            alert('Registration Successful. Now you can Login');
             setRedirect(true);
         } catch (error) {
             alert('Registration Unsuccessful')

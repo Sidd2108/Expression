@@ -35,12 +35,12 @@ app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
-        const userDoc = await User.create({
+        await User.create({
             name,
             email,
             password: bcrypt.hashSync(password, bcryptSalt)
         })
-        res.json(userDoc);
+
     } catch (error) {
         res.status(422).json(error);
     }
@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
         if (passok) {
             jwt.sign({ email: userDoc.email, id: userDoc._id }, jwtsecret, {}, (err, token) => {
                 if (err) throw err;
-                res.cookie('token', token).json(userDoc);
+                res.cookie('token', token);
             });
         }
         else {
@@ -128,7 +128,7 @@ app.post('/expressions', (req, res) => {
             title, content, photos: addedPhotos,
             postedAt: new Date().getDate()
         })
-        res.json(postDoc);
+
     });
 });
 
@@ -170,23 +170,29 @@ app.get('/user-posts', (req, res) => {
 
 app.post('/add-to-favourites/:id', async (req, res) => {
     const { token } = req.cookies;
-    const { id } = req.params;
-    jwt.verify(token, jwtsecret, {}, async (err, userData) => {
-        if (err) throw err;
-        const userDoc = await User.findById(userData.id);
-        const favPosts = userDoc.favPosts;
-        if (!favPosts.includes(id)) {
-            favPosts.push(id);
-            userDoc.set({
-                favPosts
-            })
-            await userDoc.save();
-            res.json("Added to favourites");
-        } else {
-            res.json("Already in Favourites");
-        }
+    if (!token) {
+        res.json("Login First");
+    }
+    else {
 
-    })
+        const { id } = req.params;
+        jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+            if (err) throw err;
+            const userDoc = await User.findById(userData.id);
+            const favPosts = userDoc.favPosts;
+            if (!favPosts.includes(id)) {
+                favPosts.push(id);
+                userDoc.set({
+                    favPosts
+                })
+                await userDoc.save();
+                res.json("Added to favourites");
+            } else {
+                res.json("Already in Favourites");
+            }
+
+        })
+    }
 })
 
 
