@@ -35,12 +35,12 @@ app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
-        await User.create({
+        const userDoc = await User.create({
             name,
             email,
             password: bcrypt.hashSync(password, bcryptSalt)
         })
-
+        res.json("Registered Successfully");
     } catch (error) {
         res.status(422).json(error);
     }
@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
         if (passok) {
             jwt.sign({ email: userDoc.email, id: userDoc._id }, jwtsecret, {}, (err, token) => {
                 if (err) throw err;
-                res.cookie('token', token);
+                res.cookie('token', token).json("Logged In Successfully");
             });
         }
         else {
@@ -128,7 +128,7 @@ app.post('/expressions', (req, res) => {
             title, content, photos: addedPhotos,
             postedAt: new Date().getDate()
         })
-
+        res.json("Post Created");
     });
 });
 
